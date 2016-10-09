@@ -1,0 +1,144 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <style type="text/css">
+        body {
+            text-align: center;
+            background-image: url('background.png');
+        }
+
+        button {
+            border-radius: 20px;
+            padding: 10px;
+            width: 90px;
+            color: #FFF;
+            font-size: 1.3em;
+        }
+
+        #content {
+            background-color: #FFF;
+            margin: auto;
+            width: 960px;
+            padding: 30px;
+        }
+
+        #answer_buttons {
+            padding: 10px;
+        }
+
+        #answer_yes {
+            background-color: green;
+        }
+        #answer_no {
+            background-color: red;
+        }
+
+        .quote_line {
+            padding: 5px;
+            font-size: 1.5em;
+        }
+
+        .result_line {
+            padding: 5px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+<div id="content">
+    <div>
+        <h1>Did he really say that?</h1>
+        <p>Below you will see a random quote. Try to decide whether it's something Donald Drumpf has actually said.</p>
+    </div>
+
+    <div>
+        <p class="quote_line">"<span id="quote"></span>"</p>
+        <div class="result_line"><span id="result">Did he really say that?</span></div>
+        <div id="answer_buttons">
+            <button id="answer_yes">Yes</button>
+            <button id="answer_no">No</button>
+        </div>
+        <div id="new_game" style="display: none">
+            <button id="new_game_button">New Game</button>
+        </div>
+        <p>Score: <span id="score">0</span></p>
+        <p>Strikes: <span id="strikes">0</span></p>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script>
+    var currentQuote;
+    var score = 0;
+    var strikes = 0;
+
+    function newQuote() {
+        $.get('/quote', function(quote) {
+            currentQuote = quote;
+            $('#quote').html(quote.quote);
+        })
+    }
+
+    function addStrike() {
+        strikes += 1;
+        $('#strikes').html(strikes);
+    }
+
+    function gameOver() {
+        $('#answer_buttons').hide();
+        $('#new_game').show();
+        $('#result').html("Sorry, but that's 3 strikes. Score: " + score);
+    }
+
+    function newGame() {
+        strikes = 0;
+        score = 0;
+        $('#strikes').html(0);
+        $('#score').html(0);
+        $('#answer_buttons').show();
+        $('#new_game').hide();
+        $('#result').html("Did he really say that?");
+    }
+
+    function answer(answer) {
+        if(currentQuote.dhrst == answer) {
+            score += 1;
+            $('#result').html("Correct! Try another one.");
+            $('#score').html(score);
+            newQuote();
+        }
+        else {
+            addStrike();
+            if(strikes >= 3) {
+                gameOver();
+            }
+            else {
+                $('#result').html("Wrong. Try another one.");
+                newQuote();
+            }
+        }
+        console.log("SCORE: " + score + " | STRIKES: " + strikes);
+    }
+
+    $('#answer_yes').click(function() {
+        answer(true);
+    });
+    $('#answer_no').click(function() {
+        answer(false);
+    });
+    $('#new_game_button').click(function() {
+        newGame();
+    });
+
+    newQuote();
+</script>
+</body>
+</html>

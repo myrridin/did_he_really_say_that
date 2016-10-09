@@ -1,0 +1,23 @@
+{
+  "name": "did_he_really_say_that",
+  "version": "1.0.0",
+  "description": "Did he really say that?",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myrridin/did_he_really_say_that.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/myrridin/did_he_really_say_that/issues"
+  },
+  "homepage": "https://github.com/myrridin/did_he_really_say_that#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "mongodb": "^2.2.10"
+  }
+}
