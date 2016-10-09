@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/myrridin/did_he_really_say_that.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Thomas Hart",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/myrridin/did_he_really_say_that/issues"
   },
