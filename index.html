@@ -23,8 +23,6 @@
 
         #content {
             background-color: #FFF;
-            margin: auto;
-            width: 960px;
             padding: 30px;
         }
 
@@ -52,7 +50,7 @@
 </head>
 <body>
 
-<div id="content">
+<div id="content" class="container">
     <div>
         <h1>Did he really say that?</h1>
         <p>Below you will see a random quote. Try to decide whether it's something Donald Drumpf has actually said.</p>
@@ -121,7 +119,14 @@
                 gameOver();
             }
             else {
-                $('#result').html("Wrong. Try another one.");
+                var wrong_message;
+                if(answer == false) {
+                    wrong_message = "Wrong. That was actually Donald Drumpf. Try another one.";
+                }
+                else {
+                    wrong_message = "Wrong. That was actually " + currentQuote.speaker + ". Try another one.";
+                }
+                $('#result').html(wrong_message);
                 newQuote();
             }
         }
