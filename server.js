@@ -35,6 +35,21 @@ app.get('/quote', function(req, res) {
   });
 });
 
+app.get('/submit', function(req, res) {
+  console.log(req.query.name, req.query.score);
+  db.collection('scores').insertOne({
+    name: req.query.name,
+    score: req.query.score
+  });
+  res.send("Score submitted!");
+});
+
+app.get('/scores', function(req, res) {
+  db.collection('scores').find().sort({score: -1}).toArray(function(err, items) {
+    res.send(items);
+  });
+});
+
 app.get('/background.png', function(req, res) {
   res.sendFile(__dirname + '/background.png');
 });

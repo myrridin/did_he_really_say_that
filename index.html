@@ -21,6 +21,11 @@
             font-size: 1.3em;
         }
 
+        #new_game_button {
+            width: 200px;
+            color: #000;
+        }
+
         #content {
             background-color: #FFF;
             padding: 30px;
@@ -46,6 +51,14 @@
             padding: 5px;
             font-size: 1.2em;
         }
+
+        #scores {
+            font-size: 1.5em;
+        }
+
+        #high_scores {
+            font-size: 1.5em;
+        }
     </style>
 </head>
 <body>
@@ -64,10 +77,20 @@
             <button id="answer_no">No</button>
         </div>
         <div id="new_game" style="display: none">
-            <button id="new_game_button">New Game</button>
+            <label>Input Name to Submit Score</label><br /><br />
+            <input type="text" id="name" name="name" /><br /><br />
+            <button id="new_game_button">Submit Score / New Game</button>
         </div>
-        <p>Score: <span id="score">0</span></p>
-        <p>Strikes: <span id="strikes">0</span></p>
+        <div id="scores">
+            <p>Score: <span id="score">0</span></p>
+            <p>Strikes: <span id="strikes">0</span></p>
+        </div>
+        <div id="high_scores">
+            <p>List of High Scores</p>
+            <div id="high_score_table">
+
+            </div>
+        </div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
@@ -97,6 +120,7 @@
     }
 
     function newGame() {
+        submitScore();
         strikes = 0;
         score = 0;
         $('#strikes').html(0);
@@ -104,6 +128,11 @@
         $('#answer_buttons').show();
         $('#new_game').hide();
         $('#result').html("Did he really say that?");
+    }
+
+    function submitScore() {
+        var name = $('#name').val();
+        $.get('/submit?name=' + name + '&score=' + score)
     }
 
     function answer(answer) {
@@ -136,12 +165,26 @@
     $('#answer_yes').click(function() {
         answer(true);
     });
+
     $('#answer_no').click(function() {
         answer(false);
     });
+
     $('#new_game_button').click(function() {
         newGame();
     });
+
+    function highScores() {
+        $.get('/scores', function(results) {
+            $('#high_score_table .score-row').remove();
+            results.forEach(function(score) {
+                $('#high_score_table').append('<div class="score-row">' + score.name + ' - ' + score.score + '</div>');
+            })
+        })
+    }
+
+    setInterval(highScores, 5000);
+    highScores();
 
     newQuote();
 </script>
