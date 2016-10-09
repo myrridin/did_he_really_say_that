@@ -11,22 +11,16 @@ MongoClient.connect('mongodb://dhrst:dhrst@ds053176.mlab.com:53176/dhrst', funct
   }
   else {
     db = database;
-    app.listen(3000, function() {
-      console.log('listening on 3000')
+    app.listen(process.env.PORT || 3000, function() {
+      db.collection('quotes').remove();
+      var quotes = require('./quotes.json');
+      db.collection('quotes').insert(quotes);
     });
   }
 });
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
-});
-
-app.get('/populate', function(req, res) {
-  db.collection('quotes').remove();
-  var quotes = require('./quotes.json');
-  db.collection('quotes').insert(quotes, function(err, result) {
-    res.send("DONE! " + result);
-  })
 });
 
 app.get('/quote', function(req, res) {
